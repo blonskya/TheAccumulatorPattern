@@ -185,15 +185,13 @@ def draw_lines(n, point, window):
     ####################################################################
     # ------------------------------------------------------------------
     currentpoint = point
-    ink = 1
+    strt = n-100
+    ink = 200/(n-1)
     endpnt = rg.Point(0, 0)
     for k in range(n):
         endpnt.x = currentpoint.x + 100
-        if k % 2 == 0:
-            endpnt.y = (currentpoint.y + (100*ink) / (n/2))
-        else:
-            endpnt.y = (currentpoint.y - (100*ink) / (n/2))
-            ink += 1
+        endpnt.y = currentpoint.y + strt
+        strt += ink
         linew = rg.Line(currentpoint, endpnt)
         linew.attach_to(window)
         window.render(0.05)

@@ -9,8 +9,8 @@ Additionally, it emphasizes that you must
 before you can implement a solution to the problem in Python. 
   
 Authors: David Mutchler, Dave Fisher, Valerie Galluzzi, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Andrew Blonsky.
+"""  # Done: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -98,7 +98,7 @@ def draw_squares_from_circle(n, circle, window):
       :type window: rg.RoseWindow
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # Done: 2. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -111,6 +111,20 @@ def draw_squares_from_circle(n, circle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    circle.attach_to(window)
+    window.render(0.05)
+    fstsqr = rg.Square(circle.center, 2*circle.radius)
+    fstsqr.attach_to(window)
+    window.render(0.05)
+    nwcnt=rg.Point(0, 0)
+    nwcnt.x += circle.center.x
+    nwcnt.y += circle.center.y
+    for k in range(n):
+        nwsqr = rg.Square(nwcnt, 2*circle.radius)
+        nwsqr.attach_to(window)
+        window.render(0.05)
+        nwcnt.x += circle.radius
+        nwcnt.y += circle.radius
 
 
 def test_draw_circles_from_rectangle():
@@ -122,7 +136,7 @@ def test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # ------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # Done: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -134,6 +148,34 @@ def test_draw_circles_from_rectangle():
     #   Follow the same form as the example in a previous problem.
     ####################################################################
     # ------------------------------------------------------------------
+    title = 'Tests 1 and 2 of DRAW_CIRCLES_FROM_RECTANGLE: '
+    title = title + ' 7 circles from green rectangle, 4 circles from red rectangle'
+    window1 = rg.RoseWindow(650, 350, title)
+
+    # Test 1:
+    rectangle = rg.Rectangle(rg.Point(300,200),rg.Point(400,300))
+    rectangle.fill_color = 'green'
+    draw_circles_from_rectangle(7, 8, rectangle, window1)
+
+    # Test 2:
+    rectangle2 = rg.Rectangle(rg.Point(400, 200), rg.Point(450,220))
+    rectangle2.fill_color = 'red'
+    draw_circles_from_rectangle(4, 2, rectangle2, window1)
+    window1.close_on_mouse_click()
+
+    # ------------------------------------------------------------------
+    # A third test on ANOTHER window.
+    # ------------------------------------------------------------------
+    title = 'Test 3 of DRAW_CIRCLES_FROM_RECTANGLE: '
+    title += ' 20 circles from blue rectangle!'
+    window2 = rg.RoseWindow(525, 300, title)
+
+    # Test 3:
+    rectangle3 = rg.Rectangle(rg.Point(350, 150), rg.Point(360,170))
+    rectangle3.fill_color = 'blue'
+    draw_circles_from_rectangle(9, 11, rectangle3, window2)
+
+    window2.close_on_mouse_click()
 
 
 def draw_circles_from_rectangle(m, n, rectangle, window):
@@ -176,7 +218,7 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
       :type window: rg.RoseWindow
     """
     # ------------------------------------------------------------------
-    # TODO: 4. Implement and test this function.
+    # Done: 4. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -189,6 +231,23 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    rectangle.attach_to(window)
+    emcent = rectangle.get_upper_left_corner()
+    emcent.y -= rectangle.get_width()/2
+    emcent.x += rectangle.get_width()/2
+    encent = rectangle.get_upper_left_corner()
+    encent.x -= rectangle.get_height()/2
+    encent.y += rectangle.get_height()/2
+    for k in range(m):
+        circleinf = rg.Circle(emcent, rectangle.get_width()/2)
+        circleinf.attach_to(window)
+        window.render(0.05)
+        emcent.y -= rectangle.get_width()
+    for k in range(n):
+        circleinf = rg.Circle(encent, rectangle.get_height()/2)
+        circleinf.attach_to(window)
+        window.render(0.05)
+        encent.x -= rectangle.get_height()
 
 
 def test_draw_lines_from_rectangles():
@@ -268,7 +327,7 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
       :type window: rg.RoseWindow
       """
     # ------------------------------------------------------------------
-    # TODO: 5. Implement and test this function.
+    # Done: 5. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -281,6 +340,26 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    startstart = rectangle1.get_center()
+    startend = rectangle2.get_center()
+    rectangle1.attach_to(window)
+    rectangle2.attach_to(window)
+    window.render(0.05)
+    for k in range (n):
+        lineinf = rg.Line(startstart,startend)
+        lineinf.attach_to(window)
+        lineinf.thickness = 5
+        if k % 2 == 0:
+            lineinf.color = rectangle1.outline_color
+        elif k % 2 == 1:
+            lineinf.color = rectangle2.outline_color
+        else:
+            print('concept error')
+        window.render(0.05)
+        startstart.x += (rectangle1.get_lower_left_corner().x-rectangle1.get_center().x)
+        startstart.y += (rectangle1.get_lower_left_corner().y - rectangle1.get_center().y)
+        startend.x += (rectangle1.get_lower_left_corner().x - rectangle1.get_center().x)
+        startend.y += (rectangle1.get_lower_left_corner().y - rectangle1.get_center().y)
 
 
 # ----------------------------------------------------------------------
